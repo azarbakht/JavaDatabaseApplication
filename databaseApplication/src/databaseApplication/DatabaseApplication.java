@@ -20,9 +20,11 @@ public class DatabaseApplication {
 		
 		System.out.println("Database driver loaded");
 		
-		// establish a connection to the MySQL database
- 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "swithd_javadba", "emerson(&)");
-//		Connection connection = DriverManager.getConnection("jdbc:mysql://www.azarbakht.info/swithd_JavaDatabaseApplication", "swithd_javadba", "emerson(&)");
+//		// establish a connection to the MySQL database
+// 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "swithd_javadba", "emerson(&)");
+//		// if localhost
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:4000/swithd_JavaDatabaseApplication", "swithd_javadba", "emerson(&)");
+		// if connecting to my hosting cpanel database, since ssh remote SQL connections is disabled, do SSH (via terminal) instead: ssh -L 4000:127.0.0.1:3306 -p 21098 -l swithd -N server53.web-hosting.com
 		System.out.println("Database connection established");
 		
 //		// establish a connection to the Oracle database
@@ -33,11 +35,11 @@ public class DatabaseApplication {
 		System.out.println("Database statement created");
 		
 //		// execute a statement (which returns nothing)
-//		statement.executeUpdate("create table Temp (col1 char(5), col2 char(5))");
-//		System.out.println("Database statement executed");
+		statement.executeUpdate("create table Emerson (col1 char(5), col2 char(5))");
+		System.out.println("Database statement executed");
 		
 		// get results of executing a statement (which returns something)
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM Movies");
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM Temp");
 		System.out.println("Database statement executed and loaded to resultSet");
 		
 		// process the result retrieved from the database
