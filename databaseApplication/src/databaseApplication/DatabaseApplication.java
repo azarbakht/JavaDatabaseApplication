@@ -54,7 +54,7 @@ public class DatabaseApplication {
 		
 		// parameterized SQL statement
 		PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Movies (movie_id, title, director, year_released, category_id) " + "values (?, ?, ?, ?, ?)");
-		preparedStatement.setInt(1, 2);
+		preparedStatement.setInt(1, 3);
 		preparedStatement.setString(2, "Close-Up");
 		preparedStatement.setString(3,"Kiarostami");
 		preparedStatement.setInt(4, 1989);
@@ -62,18 +62,60 @@ public class DatabaseApplication {
 		preparedStatement.executeUpdate();
 		System.out.println("Database preparedStatement executed, database updated successfully");
 		
-		
 		String queryString = "SELECT * FROM Members WHERE gender = ?";
 		PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
 		preparedStatement2.setString(1, "Female");
 		
-		ResultSet rset = preparedStatement2.executeQuery();
+		ResultSet resultSet2 = preparedStatement2.executeQuery();
 
 		System.out.println("2nd preparedStatement executed");
-		while (rset.next()) {
-			System.out.println(rset.getString(2) + " ");
+		while (resultSet2.next()) {
+			System.out.println(resultSet2.getString(2) + " ");
 		}
 		
+		
+//		// callable statement: to call SQL functions with our parameters of choice
+//		CallableStatement callableStatement = connection.prepareCall("{? = call functionNameFindMovies(?, ?)}");
+//		callableStatement.setString(2, "Close-Up");
+//		callableStatement.setString(3, "Ghost Rider");
+//		callableStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+//		callableStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+//		ResultSet resultSet3 = callableStatement.executeQuery();
+//		System.out.println("Callable statement executed");
+//
+//		while (resultSet3.next()) {
+//			System.out.println(resultSet3.getString(2) + " " + resultSet3.getString(3));
+//		}
+		
+		
+		
+		// getting the database's metadata
+		DatabaseMetaData dbMetaData = connection.getMetaData();
+		System.out.println(dbMetaData.getURL());
+		System.out.println(dbMetaData.getUserName());
+		System.out.println(dbMetaData.getDatabaseProductName());
+		System.out.println(dbMetaData.getDriverName());
+		System.out.println(dbMetaData.getMaxTableNameLength());
+		ResultSet resultSet4 = dbMetaData.getTables(null, null, null, new String[] {"TABLE"});
+		while(resultSet4.next()){
+			System.out.println(resultSet4.getString("TABLE_NAME") + " ");
+		}
+		
+		// getting the ResultSet's metadata to see what it contains
+		ResultSetMetaData resultSetMetaData = resultSet4.getMetaData();
+		for (int i = 1; i < resultSetMetaData.getColumnCount(); i++) {
+			System.out.println(resultSetMetaData.getColumnName(i));
+		}
+		
+		while(resultSet4.next()){
+			for (int j = 1; j < resultSetMetaData.getColumnCount(); j++) {
+				System.out.println(resultSet4.getObject(j));
+			}
+			
+		}
+		
+		
+		connection.close();
 	}
 
 }
